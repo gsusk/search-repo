@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
 
-type dataType = string[]
-
 function Search() {
   const [query, setQuery] = useState('')
 
