@@ -2,13 +2,13 @@ import appService from './axios'
 
 type dataType = string[]
 
-export async function fetchQueryData(query: string) {
-  appService
-    .post<dataType>('/api', query, { params: query })
-    .then((res) => {
-      return res.data
+export async function fetchQueryData(query: string): Promise<dataType | void> {
+  try {
+    const response = await appService.get<dataType>(`/api`, {
+      params: { query: query },
     })
-    .catch((err) => {
-      console.error(err)
-    })
+    return response.data
+  } catch (err) {
+    console.log(err)
+  }
 }
