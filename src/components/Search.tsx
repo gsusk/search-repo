@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
+import { fetchQueryData } from '../services/search'
+import useQuerySearch from '../hooks/query'
 
 function Search() {
   const [query, setQuery] = useState('')
+  const [results] = useQuerySearch(query)
 
   const handleQueryChange = (e: React.FormEvent<HTMLInputElement>) => {
     setQuery(e.currentTarget.value)
@@ -9,7 +12,7 @@ function Search() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      fetchData()
+      fetchQueryData()
     }, 100)
 
     return () => {
@@ -20,7 +23,13 @@ function Search() {
   return (
     <div>
       <input type="text" value={query} onChange={handleQueryChange} />
-      <div>{null && <ul></ul>}</div>
+      <div>
+        {results &&
+          results.length > 0 &&
+          results.map((res) => {
+            return <div key={res}>{res}</div>
+          })}
+      </div>
     </div>
   )
 }
