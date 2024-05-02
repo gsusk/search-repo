@@ -3,22 +3,28 @@ import { dataType, fetchQueryData } from '../services/search'
 
 type Props = string
 
-export default function useQuerySearch(query: Props) {
-  const [result, setResult] = useState<dataType>([])
+export default function useQuerySearch(query: Props): dataType {
+  const [results, setResults] = useState<dataType>([])
 
   useEffect(() => {
-    if (query !== '') {
+    console.log('refresh!2')
+    if (query === '') return setResults([])
+    const timer = setTimeout(() => {
       const fetchData = async () => {
         try {
           const data = await fetchQueryData(query)
-          setResult(data)
+          setResults(data)
         } catch (err) {
           console.log(err)
-          setResult([])
+          setResults([])
         }
       }
       fetchData()
+    }, 100)
+
+    return () => {
+      clearTimeout(timer)
     }
   }, [query])
-  return [result]
+  return results
 }
