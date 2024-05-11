@@ -1,29 +1,34 @@
 import { useEffect, useState } from 'react'
-import { dataType, fetchQueryData } from '../services/search'
+import { fetchQueryData, MovieSearch } from '../services/search'
 
 type Props = string
 
-export default function useQuerySearch(query: Props): dataType {
-  const [results, setResults] = useState<dataType>([])
+export default function useQuerySearch(query: Props): MovieSearch[] {
+  const [results, setResults] = useState<MovieSearch[]>([])
 
   useEffect(() => {
     console.log('refresh!2')
-    if (query === '') return setResults([])
+    if (query.trimStart() === '') {
+      return setResults([])
+    }
+    let ignore = false
     const timer = setTimeout(() => {
       const fetchData = async () => {
         try {
           const data = await fetchQueryData(query)
-          setResults(data)
+          console.log(data)
+          if (!ignore) setResults(data)
         } catch (err) {
           console.log(err)
-          setResults([])
+          if (!ignore) setResults([])
         }
       }
       fetchData()
-    }, 100)
+    }, 20)
 
     return () => {
       clearTimeout(timer)
+      ignore = true
     }
   }, [query])
   return results

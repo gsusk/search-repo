@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import useQuerySearch from '../hooks/query'
+import { useState } from 'react'
+import useQuerySearch from '../hooks/useQuerySearch'
 
 function Search() {
   const [query, setQuery] = useState('')
@@ -8,15 +8,39 @@ function Search() {
   const handleQueryChange = (e: React.FormEvent<HTMLInputElement>) => {
     setQuery(e.currentTarget.value)
   }
-
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       <input type="text" value={query} onChange={handleQueryChange} />
-      <div>
+      <div style={{ position: 'absolute' }}>
         {results &&
           results.length > 0 &&
-          results.map((res) => {
-            return <div key={res}>{res}</div>
+          results.map((res, i) => {
+            return (
+              <div key={i} className="">
+                <div
+                  style={{
+                    display: 'flex',
+                    marginTop: '10px',
+                    marginLeft: '6px',
+                  }}
+                >
+                  <img
+                    src={res.image}
+                    alt={res.title}
+                    width={74}
+                    height={111}
+                    loading="eager"
+                    onError={(e) =>
+                      (e.currentTarget.src = 'src/assets/search/errcsmall.png')
+                    }
+                  />
+                  <div key={i} style={{ paddingLeft: '8px' }}>
+                    {res.title}
+                  </div>
+                </div>
+                <hr style={{ marginTop: '10px' }} />
+              </div>
+            )
           })}
       </div>
     </div>
